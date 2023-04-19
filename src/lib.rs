@@ -24,7 +24,8 @@ pub fn encrypt(key: u64, msg: u32) -> u64 {
 }
 
 pub fn decrypt(key: (u32, u32), msg: u64) -> u32 {
-    32
+    let d = modinverse(EXP, carmichael_totient(key.0 as u64, key.1 as u64));
+    modexp(msg, d, key.0 as u64 * key.1 as u64) as u32
 }
 
 #[cfg(test)]
@@ -66,6 +67,16 @@ mod tests {
     #[test]
     fn testing_encrypt() {
         assert_eq!(1546352421, encrypt(2734948301, 424242));
+    }
+
+    #[test]
+    fn testing_decrypt() {
+        let expected_msg: u32 = 42069;
+        let private_key: (u32, u32) = genkey();
+        let public_key: u64 = private_key.0 as u64 * private_key.1 as u64;
+        let encrypted_msg = encrypt(public_key, expected_msg);
+        let decrypted_msg = decrypt(private_key, encrypted_msg);
+        assert_eq!(expected_msg, decrypted_msg);
     }
 
 
