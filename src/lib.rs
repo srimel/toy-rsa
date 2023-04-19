@@ -20,7 +20,7 @@ pub fn genkey() -> (u32, u32) {
 }
 
 pub fn encrypt(key: u64, msg: u32) -> u64 {
-    64
+    modexp(msg as u64, EXP, key)
 }
 
 pub fn decrypt(key: (u32, u32), msg: u64) -> u32 {
@@ -61,6 +61,11 @@ mod tests {
     fn testing_is_prime() {
         assert!(is_prime(503));
         assert!(is_prime(42) == false);
+    }
+
+    #[test]
+    fn testing_encrypt() {
+        assert_eq!(1546352421, encrypt(2734948301, 424242));
     }
 
 
