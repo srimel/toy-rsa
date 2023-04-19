@@ -2,8 +2,8 @@ use toy_rsa_lib::*;
 
 pub const EXP: u64 = 65_537;
 
-fn carmichael_totient(p : u64, q : u64) -> u64 {
-    toy_rsa_lib::lcm(p-1, q-1)
+fn carmichael_totient(p: u64, q: u64) -> u64 {
+    toy_rsa_lib::lcm(p - 1, q - 1)
 }
 
 pub fn genkey() -> (u32, u32) {
@@ -16,7 +16,7 @@ pub fn genkey() -> (u32, u32) {
             break;
         }
     }
-    (p,q)
+    (p, q)
 }
 
 pub fn encrypt(key: u64, msg: u32) -> u64 {
@@ -71,6 +71,18 @@ mod tests {
 
     #[test]
     fn testing_decrypt() {
+        let msg = 0x12345fu32;
+        let private_key = (0xed23e6cdu32, 0xf050a04du32);
+        let public_key = private_key.0 as u64 * private_key.1 as u64;
+        assert_eq!(0xde9c5816141c8ba9, public_key);
+        let encrypted_msg = encrypt(public_key, msg);
+        assert_eq!(0x6418280e0c4d7675, encrypted_msg);
+        let decrypted_msg = decrypt(private_key, encrypted_msg);
+        assert_eq!(msg, decrypted_msg);
+    }
+
+    #[test]
+    fn testing_decrypt_from_genkey() {
         let expected_msg: u32 = 42069;
         let private_key: (u32, u32) = genkey();
         let public_key: u64 = private_key.0 as u64 * private_key.1 as u64;
@@ -78,6 +90,4 @@ mod tests {
         let decrypted_msg = decrypt(private_key, encrypted_msg);
         assert_eq!(expected_msg, decrypted_msg);
     }
-
-
 }
