@@ -1,8 +1,8 @@
 //! # Toy RSA Library
 //! ### Stuart Rimel, Rust, Spring 2023
-//! 
-//! This library provides RSA key generation, encryption and decryption. 
-//! 
+//!
+//! This library provides RSA key generation, encryption and decryption.
+//!
 //! This crate is an exercise and should not be used for anything that
 //! needs to be kept secure in real-life.
 
@@ -17,7 +17,7 @@ fn carmichael_totient(p: u64, q: u64) -> u64 {
 }
 
 /// Generates a pair of primes in the range `2**31..2**32`
-/// suitable for RSA encryption with exponent. 
+/// suitable for RSA encryption with exponent.
 pub fn genkey() -> (u32, u32) {
     let (mut p, mut q);
     loop {
